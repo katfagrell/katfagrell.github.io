@@ -59,16 +59,42 @@
 
     const condition1LikertScale = {
       type: jsPsychSurveyLikert,
+      preamble: '<img src="condition1.png"></img>',
       questions: [
         {
-          prompt: '<img src="condition1.png"></img><p>This is binary.</p>',
+          prompt: "This is question 1.",
           labels: likert_scale,
-          required: true,
+          required: true
         },
         {
-          prompt: '<img src="condition1.png"></img><p>This is binary.</p>',
+          prompt: "This is question 2.",
           labels: likert_scale,
-          required: true,
+          required: true
+        },
+        {
+          prompt: "This is question 3.",
+          labels: likert_scale,
+          required: true
+        },
+        {
+          prompt: "This is question 4.",
+          labels: likert_scale,
+          required: true
+        },
+        {
+          prompt: "This is question 5.",
+          labels: likert_scale,
+          required: true
+        },
+        {
+          prompt: "This is question 6.",
+          labels: likert_scale,
+          required: true
+        },
+        {
+          prompt: "This is question 7.",
+          labels: likert_scale,
+          required: true
         },
       ],
       randomize_question_order: true,
@@ -79,12 +105,47 @@
       preamble: '<img src="condition2.png"></img>',
       questions: [
         {
-          prompt: "This is cont.",
+          prompt: "This is question 1.",
           labels: likert_scale,
+          required: true
+        },
+        {
+          prompt: "This is question 2.",
+          labels: likert_scale,
+          required: true
+        },
+        {
+          prompt: "This is question 3.",
+          labels: likert_scale,
+          required: true
+        },
+        {
+          prompt: "This is question 4.",
+          labels: likert_scale,
+          required: true
+        },
+        {
+          prompt: "This is question 5.",
+          labels: likert_scale,
+          required: true
+        },
+        {
+          prompt: "This is question 6.",
+          labels: likert_scale,
+          required: true
+        },
+        {
+          prompt: "This is question 7.",
+          labels: likert_scale,
+          required: true
         },
       ],
       randomize_question_order: true,
     };
+
+
+
+
 
     //create trial timeline
 
@@ -93,8 +154,9 @@
     const instructions = {
       type: jsPsychInstructions,
       pages: [
-        "Welcome to the experiment. Press the button to begin.",
+        "Welcome to the experiment. Press the 'next' button to begin.",
         "In this experiment, you will be shown multiple graphs of data and wil be asked for your opinion about their significance",
+        "By pressing 'next' to begin the experiment, you consent to the following: *insert consent here*"
       ],
       show_clickable_nav: true,
     };
@@ -112,6 +174,16 @@
     } else {
       timeline.push(condition2LikertScale);
     }
+
+    //trial 3: finish page
+    const finishPage= {
+      type: jsPsychInstructions,
+      pages: [
+        "Thank you for your participation. If you ran into any issues, please message the researchers at cocopolucla@gmail.com."
+      ]
+    }
+    timeline.push(finishPage)
+
 
     //run experiment
     jsPsych.run(timeline);
