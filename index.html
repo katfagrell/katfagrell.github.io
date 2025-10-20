@@ -64,37 +64,37 @@
         {
           prompt: "This is question 1.",
           labels: likert_scale,
-          required: true
+          required: true,
         },
         {
           prompt: "This is question 2.",
           labels: likert_scale,
-          required: true
+          required: true,
         },
         {
           prompt: "This is question 3.",
           labels: likert_scale,
-          required: true
+          required: true,
         },
         {
           prompt: "This is question 4.",
           labels: likert_scale,
-          required: true
+          required: true,
         },
         {
           prompt: "This is question 5.",
           labels: likert_scale,
-          required: true
+          required: true,
         },
         {
           prompt: "This is question 6.",
           labels: likert_scale,
-          required: true
+          required: true,
         },
         {
           prompt: "This is question 7.",
           labels: likert_scale,
-          required: true
+          required: true,
         },
       ],
       randomize_question_order: true,
@@ -107,47 +107,43 @@
         {
           prompt: "This is question 1.",
           labels: likert_scale,
-          required: true
+          required: true,
         },
         {
           prompt: "This is question 2.",
           labels: likert_scale,
-          required: true
+          required: true,
         },
         {
           prompt: "This is question 3.",
           labels: likert_scale,
-          required: true
+          required: true,
         },
         {
           prompt: "This is question 4.",
           labels: likert_scale,
-          required: true
+          required: true,
         },
         {
           prompt: "This is question 5.",
           labels: likert_scale,
-          required: true
+          required: true,
         },
         {
           prompt: "This is question 6.",
           labels: likert_scale,
-          required: true
+          required: true,
         },
         {
           prompt: "This is question 7.",
           labels: likert_scale,
-          required: true
+          required: true,
         },
       ],
       randomize_question_order: true,
     };
 
-
-
-
-
-    //create trial timeline
+    //create experiment timeline
 
     //trial 1: welcome page **change so you prompt a specific key
     //add examples if needed
@@ -156,7 +152,7 @@
       pages: [
         "Welcome to the experiment. Press the 'next' button to begin.",
         "In this experiment, you will be shown multiple graphs of data and wil be asked for your opinion about their significance",
-        "By pressing 'next' to begin the experiment, you consent to the following: *insert consent here*"
+        "By pressing 'next' to begin the experiment, you consent to the following: *insert consent here*",
       ],
       show_clickable_nav: true,
     };
@@ -176,14 +172,14 @@
     }
 
     //trial 3: finish page
-    const finishPage= {
+    const finishPage = {
       type: jsPsychInstructions,
       pages: [
-        "Thank you for your participation. If you ran into any issues, please message the researchers at cocopolucla@gmail.com."
-      ]
-    }
-    timeline.push(finishPage)
-
+        "Thank you for your participation. If you ran into any issues, please message the researchers at cocopolucla@gmail.com.",
+      ],
+      show_clickable_nav: true,
+    };
+    timeline.push(finishPage);
 
     //run experiment
     jsPsych.run(timeline);
