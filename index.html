@@ -50,7 +50,7 @@
 
     var preload = {
       type: jsPsychPreload,
-      images: ["condition1.png", "condition2.png"],
+      images: ["condition1.png", "condition2.png"], // images are binary_0.421774511013192_ & continuous_0.389863323689087_.png respectively from lake_experiment_dallinger with labels removed and renamed
     };
 
     const likert_scale = [
@@ -64,7 +64,7 @@
     //condition 1 = binary data graph
     const condition1LikertScale = {
       type: jsPsychSurveyLikert,
-      preamble: '<img src="condition1.png"></img>',
+      preamble: '<img src="condition1.png" style="width: 90%"></img>',
       questions: [
         {
           prompt: "This is question 1.",
@@ -108,7 +108,7 @@
     //condition 2 = cont data graph
     const condition2LikertScale = {
       type: jsPsychSurveyLikert,
-      preamble: '<img src="condition2.png"></img>',
+      preamble: '<img src="condition2.png" style="width: 90%"></img>',
       questions: [
         {
           prompt: "This is question 1.",
