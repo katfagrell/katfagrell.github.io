@@ -26,16 +26,20 @@
     <script src="https://unpkg.com/@jspsych/plugin-survey-likert@1.1.3"></script>
     <script src="https://unpkg.com/@jspsych/plugin-instructions@1.1.4"></script>
 
-    <!--link css stylesheet-->
+    <!--link jspsych css stylesheet-->
     <link
       href="https://unpkg.com/jspsych@8.2.2/css/jspsych.css"
       rel="stylesheet"
       type="text/css"
     />
   </head>
+
   <body></body>
 
   <script>
+    //this experiment using likert scales will record the follow data for each participant:
+    //response, response time in milliseconds, question order
+
     //this is where the JavaScript will go to add functionality to the website
 
     //initialize jsPsych
@@ -57,6 +61,7 @@
       "Strongly Agree",
     ];
 
+    //condition 1 = binary data graph
     const condition1LikertScale = {
       type: jsPsychSurveyLikert,
       preamble: '<img src="condition1.png"></img>',
@@ -100,6 +105,7 @@
       randomize_question_order: true,
     };
 
+    //condition 2 = cont data graph
     const condition2LikertScale = {
       type: jsPsychSurveyLikert,
       preamble: '<img src="condition2.png"></img>',
@@ -143,9 +149,9 @@
       randomize_question_order: true,
     };
 
-    //create experiment timeline
+    //add to experiment timeline
 
-    //trial 1: welcome page **change so you prompt a specific key
+    //trial 1: welcome page
     //add examples if needed
     const instructions = {
       type: jsPsychInstructions,
@@ -183,8 +189,5 @@
 
     //run experiment
     jsPsych.run(timeline);
-
-    //this experiment using likert scales will record the follow data for each participant:
-    //response, response time in milliseconds, question order
   </script>
 </html>
