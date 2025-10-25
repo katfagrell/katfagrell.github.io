@@ -15,9 +15,8 @@
     <title>Experiment</title>
 
     <!--add Pavlovia functionality-->
-    <!---removed pavlovia functionality for this page-->
-    <script src="https://unpkg.com/jspsych@8.2.1"></script>
-    <!--"quoted from pavlovia doc"--->
+    <script src="https://unpkg.com/jspsych@8.2.1"></script>   <!--"quoted from pavlovia doc"--->
+  
 
     <!--jsPsych and plugins-->
     <!---<script src="https://unpkg.com/jspsych@7.3.4"></script>--->
@@ -51,14 +50,15 @@
     //initialize jsPsych
     const jsPsych = initJsPsych();
 
-    //initialize Pavlovia connection
-    //
+   //initialize Pavlovia connection
+ 
 
-    //trial to finish connection with pavlovia.org
-    //
+    //trial to finish connection with pavlovia.org 
+
 
     //initialize timeline with empty array, trials will be added as they are created
     let timeline = [];
+
 
     var preload = {
       type: jsPsychPreload,
@@ -161,7 +161,7 @@
     //condition 2 = cont graph
     const condition2LikertScaleTrial1 = {
       type: jsPsychSurveyLikert,
-      preamble: '<img src="condition1.png" style="width: 70%"></img>',
+      preamble: '<img src="condition2.png" style="width: 70%"></img>',
       questions: [
         {
           prompt: "This is question 1.",
@@ -173,7 +173,7 @@
 
     const condition2LikertScaleTrial2 = {
       type: jsPsychSurveyLikert,
-      preamble: '<img src="condition1.png" style="width: 70%"></img>',
+      preamble: '<img src="condition2.png" style="width: 70%"></img>',
       questions: [
         {
           prompt: "This is question 2.",
@@ -185,7 +185,7 @@
 
     const condition2LikertScaleTrial3 = {
       type: jsPsychSurveyLikert,
-      preamble: '<img src="condition1.png" style="width: 70%"></img>',
+      preamble: '<img src="condition2.png" style="width: 70%"></img>',
       questions: [
         {
           prompt: "This is question 3.",
@@ -196,7 +196,7 @@
     };
     const condition2LikertScaleTrial4 = {
       type: jsPsychSurveyLikert,
-      preamble: '<img src="condition1.png" style="width: 70%"></img>',
+      preamble: '<img src="condition2.png" style="width: 70%"></img>',
       questions: [
         {
           prompt: "This is question 4.",
@@ -208,7 +208,7 @@
 
     const condition2LikertScaleTrial5 = {
       type: jsPsychSurveyLikert,
-      preamble: '<img src="condition1.png" style="width: 70%"></img>',
+      preamble: '<img src="condition2.png" style="width: 70%"></img>',
       questions: [
         {
           prompt: "This is question 5.",
@@ -220,7 +220,7 @@
 
     const condition2LikertScaleTrial6 = {
       type: jsPsychSurveyLikert,
-      preamble: '<img src="condition1.png" style="width: 70%"></img>',
+      preamble: '<img src="condition2.png" style="width: 70%"></img>',
       questions: [
         {
           prompt: "This is question 6.",
@@ -232,7 +232,7 @@
 
     const condition2LikertScaleTrial7 = {
       type: jsPsychSurveyLikert,
-      preamble: '<img src="condition1.png" style="width: 70%"></img>',
+      preamble: '<img src="condition2.png" style="width: 70%"></img>',
       questions: [
         {
           prompt: "This is question 7.",
@@ -311,7 +311,7 @@
     };
     timeline.push(finishPage);
 
-    //
+
 
     //run experiment
     jsPsych.run(timeline);
