@@ -4,8 +4,7 @@
     <meta charset="utf-8" />
 
     <!---display in device width-->
-    <meta name="viewport" content="width=device-width, viewport-fit=auto" />
-    <!---i don't think this is doing anything-->
+    <meta name="viewport" content="width=device-width, viewport-fit=auto"/> <!---i don't think this is doing anything-->
 
     <meta name="author" content="Katherine Fagrell" />
     <meta
@@ -15,18 +14,10 @@
 
     <title>Experiment</title>
 
+
     <!--add Pavlovia functionality-->
-    <script src="https://unpkg.com/jspsych@8.2.1"></script>
-    <!--"quoted from pavlovia doc"--->
-    <link
-      href="https://unpkg.com/jspsych@8.2.1/css/jspsych.css"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <script
-      type="text/javascript"
-      src=" https://pavlovia.org/lib/jspsych-7-pavlovia-2022.1.1.js"
-    ></script>
+    <script src="https://unpkg.com/jspsych@8.2.1"></script>   <!--"quoted from pavlovia doc"--->
+
 
     <!--jsPsych and plugins-->
     <!---<script src="https://unpkg.com/jspsych@7.3.4"></script>--->
@@ -60,24 +51,21 @@
     //initialize jsPsych
     //const jsPsych = initJsPsych();
 
-    var jsPsych = initJsPsych();
-
-    //initialize Pavlovia connection
-    const pavlovia_init = {
-      type: jsPsychPavlovia,
-      command: "init",
-    };
-
-    //trial to finish connection with pavlovia.org
-    var pavlovia_finish = {
-      type: jsPsychPavlovia,
-      command: "finish",
-    };
+    var jsPsych = initJsPsych(
+      {
+      experiment_width: 400,
+      on_finish: function() {
+          jsPsych.data.displayData('csv');
+      }
+      }
+      );
+  
 
     //initialize timeline with empty array, trials will be added as they are created
     let timeline = [];
 
-    timeline.push(pavlovia_init);
+
+
 
     var preload = {
       type: jsPsychPreload,
@@ -145,7 +133,7 @@
           prompt: "This is question 3.",
           labels: likert_scale,
           required: true,
-        },
+        }
       ],
       randomize_question_order: true,
     };
@@ -176,9 +164,9 @@
       timeline.push(condition1LikertScale);
     } else {
       timeline.push(condition2LikertScale);
-    }
+    };
 
-    jsPsych.data.addProperties({ condition: group });
+    jsPsych.data.addProperties({condition: group});
 
     //trial 3: finish page
     const finishPage = {
@@ -190,9 +178,10 @@
     };
     timeline.push(finishPage);
 
-    timeline.push(pavlovia_finish);
+
 
     //run experiment
     jsPsych.run(timeline);
+
   </script>
 </html>
