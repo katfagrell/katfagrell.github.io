@@ -4,7 +4,8 @@
     <meta charset="utf-8" />
 
     <!---display in device width-->
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, viewport-fit=auto" />
+    <!---i don't think this is doing anything-->
 
     <meta name="author" content="Katherine Fagrell" />
     <meta
@@ -15,8 +16,17 @@
     <title>Experiment</title>
 
     <!--add Pavlovia functionality-->
-    <script src="https://unpkg.com/jspsych@8.2.1"></script>   <!--"quoted from pavlovia doc"--->
-  
+    <script src="https://unpkg.com/jspsych@8.2.1"></script>
+    <!--"quoted from pavlovia doc"--->
+    <link
+      href="https://unpkg.com/jspsych@8.2.1/css/jspsych.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script
+      type="text/javascript"
+      src=" https://pavlovia.org/lib/jspsych-7-pavlovia-2022.1.1.js"
+    ></script>
 
     <!--jsPsych and plugins-->
     <!---<script src="https://unpkg.com/jspsych@7.3.4"></script>--->
@@ -48,17 +58,26 @@
     //this is where the JavaScript will go to add functionality to the website
 
     //initialize jsPsych
-    const jsPsych = initJsPsych();
+    //const jsPsych = initJsPsych();
 
-   //initialize Pavlovia connection
- 
+    var jsPsych = initJsPsych();
 
-    //trial to finish connection with pavlovia.org 
+    //initialize Pavlovia connection
+    const pavlovia_init = {
+      type: jsPsychPavlovia,
+      command: "init",
+    };
 
+    //trial to finish connection with pavlovia.org
+    var pavlovia_finish = {
+      type: jsPsychPavlovia,
+      command: "finish",
+    };
 
     //initialize timeline with empty array, trials will be added as they are created
     let timeline = [];
 
+    timeline.push(pavlovia_init);
 
     var preload = {
       type: jsPsychPreload,
@@ -74,172 +93,61 @@
     ];
 
     //condition 1 = binary data graph
-    const condition1LikertScaleTrial1 = {
+    const condition1LikertScale = {
       type: jsPsychSurveyLikert,
-      preamble: '<img src="condition1.png" style="width: 70%"></img>',
+      preamble: '<img src="condition1.png" style="width: 100%"></img>',
       questions: [
+        {
+          prompt: "This is question 0.",
+          labels: likert_scale,
+          required: true,
+        },
         {
           prompt: "This is question 1.",
           labels: likert_scale,
           required: true,
         },
-      ],
-    };
-
-    const condition1LikertScaleTrial2 = {
-      type: jsPsychSurveyLikert,
-      preamble: '<img src="condition1.png" style="width: 70%"></img>',
-      questions: [
         {
           prompt: "This is question 2.",
           labels: likert_scale,
           required: true,
         },
-      ],
-    };
-
-    const condition1LikertScaleTrial3 = {
-      type: jsPsychSurveyLikert,
-      preamble: '<img src="condition1.png" style="width: 70%"></img>',
-      questions: [
         {
           prompt: "This is question 3.",
           labels: likert_scale,
           required: true,
         },
       ],
+      randomize_question_order: true,
     };
 
-    const condition1LikertScaleTrial4 = {
+    //condition 2 = cont data graph
+    const condition2LikertScale = {
       type: jsPsychSurveyLikert,
-      preamble: '<img src="condition1.png" style="width: 70%"></img>',
+      preamble: '<img src="condition2.png" style="width: 100%"></img>',
       questions: [
         {
-          prompt: "This is question 4.",
+          prompt: "This is question 0.",
           labels: likert_scale,
           required: true,
         },
-      ],
-    };
-
-    const condition1LikertScaleTrial5 = {
-      type: jsPsychSurveyLikert,
-      preamble: '<img src="condition1.png" style="width: 70%"></img>',
-      questions: [
-        {
-          prompt: "This is question 5.",
-          labels: likert_scale,
-          required: true,
-        },
-      ],
-    };
-
-    const condition1LikertScaleTrial6 = {
-      type: jsPsychSurveyLikert,
-      preamble: '<img src="condition1.png" style="width: 70%"></img>',
-      questions: [
-        {
-          prompt: "This is question 6.",
-          labels: likert_scale,
-          required: true,
-        },
-      ],
-    };
-
-    const condition1LikertScaleTrial7 = {
-      type: jsPsychSurveyLikert,
-      preamble: '<img src="condition1.png" style="width: 70%"></img>',
-      questions: [
-        {
-          prompt: "This is question 7.",
-          labels: likert_scale,
-          required: true,
-        },
-      ],
-    };
-
-    //condition 2 = cont graph
-    const condition2LikertScaleTrial1 = {
-      type: jsPsychSurveyLikert,
-      preamble: '<img src="condition2.png" style="width: 70%"></img>',
-      questions: [
         {
           prompt: "This is question 1.",
           labels: likert_scale,
           required: true,
         },
-      ],
-    };
-
-    const condition2LikertScaleTrial2 = {
-      type: jsPsychSurveyLikert,
-      preamble: '<img src="condition2.png" style="width: 70%"></img>',
-      questions: [
         {
           prompt: "This is question 2.",
           labels: likert_scale,
           required: true,
         },
-      ],
-    };
-
-    const condition2LikertScaleTrial3 = {
-      type: jsPsychSurveyLikert,
-      preamble: '<img src="condition2.png" style="width: 70%"></img>',
-      questions: [
         {
           prompt: "This is question 3.",
           labels: likert_scale,
           required: true,
         },
       ],
-    };
-    const condition2LikertScaleTrial4 = {
-      type: jsPsychSurveyLikert,
-      preamble: '<img src="condition2.png" style="width: 70%"></img>',
-      questions: [
-        {
-          prompt: "This is question 4.",
-          labels: likert_scale,
-          required: true,
-        },
-      ],
-    };
-
-    const condition2LikertScaleTrial5 = {
-      type: jsPsychSurveyLikert,
-      preamble: '<img src="condition2.png" style="width: 70%"></img>',
-      questions: [
-        {
-          prompt: "This is question 5.",
-          labels: likert_scale,
-          required: true,
-        },
-      ],
-    };
-
-    const condition2LikertScaleTrial6 = {
-      type: jsPsychSurveyLikert,
-      preamble: '<img src="condition2.png" style="width: 70%"></img>',
-      questions: [
-        {
-          prompt: "This is question 6.",
-          labels: likert_scale,
-          required: true,
-        },
-      ],
-    };
-
-    const condition2LikertScaleTrial7 = {
-      type: jsPsychSurveyLikert,
-      preamble: '<img src="condition2.png" style="width: 70%"></img>',
-      questions: [
-        {
-          prompt: "This is question 7.",
-          labels: likert_scale,
-          required: true,
-        },
-      ],
+      randomize_question_order: true,
     };
 
     //add to experiment timeline
@@ -260,46 +168,17 @@
 
     //trial 2: random assignment to condition 1 (binary) or condition 2 (continuous)
     // credit = https://www.jspsych.org/v8/reference/jspsych-randomization/#sample-with-equal-probability
-
-    var trialArrayCondition1 = [
-      condition1LikertScaleTrial1,
-      condition1LikertScaleTrial2,
-      condition1LikertScaleTrial3,
-      condition1LikertScaleTrial4,
-      condition1LikertScaleTrial5,
-      condition1LikertScaleTrial6,
-      condition1LikertScaleTrial7,
-    ];
-
-    var shuffledTrialArrayCondition1 = jsPsych.randomization.repeat(
-      trialArrayCondition1,
-      1
-    ); //shuffle array, no repeats
-
-    var trialArrayCondition2 = [
-      condition2LikertScaleTrial1,
-      condition2LikertScaleTrial2,
-      condition2LikertScaleTrial3,
-      condition2LikertScaleTrial4,
-      condition2LikertScaleTrial5,
-      condition2LikertScaleTrial6,
-      condition2LikertScaleTrial7,
-    ];
-
-    var shuffledTrialArrayCondition2 = jsPsych.randomization.repeat(
-      trialArrayCondition2,
-      1
-    ); //shuffle array, no repeats
-
     const myArray = [1, 2];
     var group = jsPsych.randomization.sampleWithReplacement(myArray, 1);
 
-    //add trials to end of timeline
+    //add trial 2 to end of timeline
     if (group == 1) {
-      timeline.push(shuffledTrialArrayCondition1);
+      timeline.push(condition1LikertScale);
     } else {
-      timeline.push(shuffledTrialArrayCondition2);
+      timeline.push(condition2LikertScale);
     }
+
+    jsPsych.data.addProperties({ condition: group });
 
     //trial 3: finish page
     const finishPage = {
@@ -311,7 +190,7 @@
     };
     timeline.push(finishPage);
 
-
+    timeline.push(pavlovia_finish);
 
     //run experiment
     jsPsych.run(timeline);
