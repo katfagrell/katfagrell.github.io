@@ -4,7 +4,8 @@
     <meta charset="utf-8" />
 
     <!---display in device width-->
-    <meta name="viewport" content="width=device-width, viewport-fit=auto"/> <!---i don't think this is doing anything-->
+    <meta name="viewport" content="width=device-width, viewport-fit=auto" />
+    <!---i don't think this is doing anything-->
 
     <meta name="author" content="Katherine Fagrell" />
     <meta
@@ -14,10 +15,18 @@
 
     <title>Experiment</title>
 
-
     <!--add Pavlovia functionality-->
-    <script src="https://unpkg.com/jspsych@8.2.1"></script>   <!--"quoted from pavlovia doc"--->
-
+    <script src="https://unpkg.com/jspsych@8.2.1"></script>
+    <!--"quoted from pavlovia doc"--->
+    <link
+      href="https://unpkg.com/jspsych@8.2.1/css/jspsych.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script
+      type="text/javascript"
+      src=" https://pavlovia.org/lib/jspsych-7-pavlovia-2022.1.1.js"
+    ></script>
 
     <!--jsPsych and plugins-->
     <!---<script src="https://unpkg.com/jspsych@7.3.4"></script>--->
@@ -31,6 +40,8 @@
     <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-survey-likert@1.1.3"></script>
     <script src="https://unpkg.com/@jspsych/plugin-instructions@1.1.4"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-external-html@1.1.3"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-fullscreen@1.2.1"></script>
 
     <!--link jsPsych css stylesheet-->
     <link
@@ -38,71 +49,223 @@
       rel="stylesheet"
       type="text/css"
     />
+
+    <!--preload images-->
+
+    <link rel="preload" href="binary_0.30230805510781_.png" as="image" />
+    <link rel="preload" href="binary_0.43906666276199_.png" as="image" />
+    <link rel="preload" href="binary_0.616832475402624_.png" as="image" />
+    <link rel="preload" href="continuous_0.30230805510781_.png" as="image" />
+    <link rel="preload" href="continuous_0.43906666276199_.png" as="image" />
+    <link rel="preload" href="continuous_0.616832475402624_.png" as="image" />
   </head>
 
   <body></body>
 
   <script>
     //this experiment using likert scales will record the follow data for each participant:
-    //response, response time in milliseconds, question order
+    //response, response time in milliseconds, question order, condition
 
     //this is where the JavaScript will go to add functionality to the website
 
     //initialize jsPsych
     //const jsPsych = initJsPsych();
 
-    var jsPsych = initJsPsych(
-      {
-      experiment_width: 400,
-      on_finish: function() {
-          jsPsych.data.displayData('csv');
-      }
-      }
-      );
-  
+    var jsPsych = initJsPsych({
+      experiment_width: 700,
+      on_finish: function (data) {
+        console.log(JSON.stringify(data));
+      },
+    });
+
+    jsPsych.data.addProperties({
+      subject_id: jsPsych.randomization.randomID(),
+    });
 
     //initialize timeline with empty array, trials will be added as they are created
     let timeline = [];
 
-
-
-
     var preload = {
       type: jsPsychPreload,
-      images: ["condition1.png", "condition2.png"], // images are binary_0.421774511013192_ & continuous_0.389863323689087_.png respectively from lake_experiment_dallinger with labels removed and renamed
+      images: [
+        "binary_0.30230805510781_.png",
+        "binary_0.43906666276199_.png",
+        "binary_0.616832475402624_.png",
+        "continuous_0.30230805510781_.png",
+        "continuous_0.43906666276199_.png",
+        "continuous_0.616832475402624_.png",
+      ], // images are binary_0.421774511013192_ & continuous_0.389863323689087_.png respectively from lake_experiment_dallinger with labels removed and renamed
     };
 
-    const likert_scale = [
-      "Strongly Disagree",
-      "Disagree",
-      "Neutral",
-      "Agree",
-      "Strongly Agree",
+    binary_plots = [
+      "binary_0.30230805510781_.png",
+      "binary_0.43906666276199_.png",
+      "binary_0.616832475402624_.png",
     ];
 
+    continuous_plots = [
+      "continuous_0.30230805510781_.png",
+      "continuous_0.43906666276199_.png",
+      "continuous_0.616832475402624_.png",
+    ];
+
+    //initialize Pavlovia connection
+    const pavlovia_init = {
+      type: jsPsychPavlovia,
+      command: "init",
+    };
+
+    //trial to finish connection with pavlovia.org
+    const pavlovia_finish = {
+      type: jsPsychPavlovia,
+      command: "finish",
+      on_finish: function () {
+        document.body.innerHTML = `<p> Please wait. You will be redirected back to Prolific in a few moments. 
+                  If you get a pop-up warning you "data may not be saved", you can click "leave", your data have already been saved.</p>`;
+        setTimeout(function () {
+          location.href =
+            "https://app.prolific.co/submissions/complete?cc=XXXXXX";
+          document.body.innerHTML = `<p>If you are not automatically redirected, please click here: 
+                    <a href="https://app.prolific.co/submissions/complete?cc=XXXXXX">https://app.prolific.co/submissions/complete?cc=XXXXXX</a></p>
+                    <p>If you get a pop-up warning you "data may not be saved", you can click "leave", your data have already been saved.</p`;
+        }, 5000);
+      },
+    };
+
+    const instructions_general = {
+      type: jsPsychInstructions,
+      pages: [
+        "Welcome to the experiment. Press the 'next' button to begin.",
+        "In this experiment, you will be shown a graph and will be asked for your opinion about its significance. You will be automatically redirected to Prolific when the experiment is finished. Please do not close this page until prompted, or your data will be lost and you will not receive credit. <strong>You will not be able to try again if you leave.</strong>",
+      ],
+      show_clickable_nav: true,
+    };
+
+    var check_consent = function (elem) {
+      if (document.getElementById("consent_checkbox").checked) {
+        return true;
+      } else {
+        alert(
+          "If you wish to participate, you must check the box next to the statement 'I agree to participate in this study.'"
+        );
+        return false;
+      }
+      return false;
+    };
+
+    var consent_trial = {
+      type: jsPsychExternalHtml,
+      url: "consent.html",
+      cont_btn: "start",
+      check_fn: check_consent,
+    };
+
+    const instructions_condition1 = {
+      type: jsPsychInstructions,
+      pages: [
+        `
+        <p>Imagine that you’ve been instructed to count the <u>number of bikes you see each day
+           on your commute to work for two months</u> to monitor the use of new bike lanes. The area you live in has very 
+           mild weather with <u>no</u> snow or rainstorms. </p>
+        `,
+
+        `    
+        <p>On the following screen, you will see a graph representing how many 
+          bikes you saw. A point towards the top of the graph represents a day where 
+          you saw more than ten (10) bikes on your commute to work. 
+          A point towards the bottom represents a day where you saw less than ten (10) bikes on your way to work. </p>
+        `,
+      ],
+      show_clickable_nav: true,
+    };
+
+    const instructions_condition2 = {
+      type: jsPsychInstructions,
+      pages: [
+        `
+        <p>Imagine that you’ve been instructed to count the <u>number of bikes you see each day
+           on your commute to work for two months</u> to monitor the use of new bike lanes. The area you live in has very 
+           mild weather with <u>no</u> snow or rainstorms. </p>
+        `,
+
+        `    
+        <p>On the following screen, you will see a graph representing how 
+        many bikes you saw. The y-axis on the left represents the 
+        number of bikes. The x-axis at the bottom represents time, in days. 
+        Therefore, a point on the graph will 
+        indicate the amount of bikes you saw on
+        that day of your assignment. </p>
+        `,
+      ],
+      show_clickable_nav: true,
+    };
+
+    const filler_screen = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: "Now the graph will be shown to you.",
+      choices: ["a"],
+      prompt: "<p>Press 'a' when you are ready to view the graph.</p>",
+    };
+
+    const random_binary_plot =
+      binary_plots[Math.floor(Math.random() * binary_plots.length)];
+
+    const image_display_binary = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: `<div style='float: center;'><img src=${random_binary_plot} width = 100%></img></div>`,
+      prompt:
+        "<p>Press 'k' when you are ready to advance to the next screen.</p>",
+      choices: ["k"],
+    };
+
+    const random_continuous_plot =
+      continuous_plots[Math.floor(Math.random() * continuous_plots.length)];
+
+    const image_display_continuous = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: `<div style='float: center;'><img src= ${random_continuous_plot} width =100%></img></div>`,
+      prompt:
+        "<p>Press 'k' when you are ready to advance to the next screen.</p>",
+      choices: ["k"],
+    };
+
     //condition 1 = binary data graph
-    const condition1LikertScale = {
+    const binary_likertscale = {
       type: jsPsychSurveyLikert,
-      preamble: '<img src="condition1.png" style="width: 100%"></img>',
       questions: [
         {
-          prompt: "This is question 0.",
-          labels: likert_scale,
+          name: "Amount",
+          prompt:
+            "How much do you think the amount of bikes on the road has changed in the last 2 months?",
+          labels: [
+            "1 (remained the same)",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "10 (changed a lot)",
+          ],
           required: true,
         },
         {
-          prompt: "This is question 1.",
-          labels: likert_scale,
-          required: true,
-        },
-        {
-          prompt: "This is question 2.",
-          labels: likert_scale,
-          required: true,
-        },
-        {
-          prompt: "This is question 3.",
-          labels: likert_scale,
+          name: "Attention",
+          prompt: "This is a quick attention check, please select option 10.",
+          labels: [
+            "1 (not paying attention)",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "10 (paying attention)",
+          ],
           required: true,
         },
       ],
@@ -110,78 +273,139 @@
     };
 
     //condition 2 = cont data graph
-    const condition2LikertScale = {
+    const continuous_likertscale = {
       type: jsPsychSurveyLikert,
-      preamble: '<img src="condition2.png" style="width: 100%"></img>',
       questions: [
         {
-          prompt: "This is question 0.",
-          labels: likert_scale,
+          name: "Amount",
+          prompt:
+            "How much do you think the amount of bikes on the road has changed in the last 2 months?",
+          labels: [
+            "1 (remained the same)",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "10 (changed a lot)",
+          ],
           required: true,
         },
         {
-          prompt: "This is question 1.",
-          labels: likert_scale,
+          name: "Attention",
+          prompt: "This is a quick attention check, please select option 10.",
+          labels: [
+            "1 (not paying attention)",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "10 (paying attention)",
+          ],
           required: true,
         },
-        {
-          prompt: "This is question 2.",
-          labels: likert_scale,
-          required: true,
-        },
-        {
-          prompt: "This is question 3.",
-          labels: likert_scale,
-          required: true,
-        }
       ],
       randomize_question_order: true,
     };
 
+    const debrief = {
+      type: jsPsychInstructions,
+      pages: [
+        `
+        <h1>DEBRIEFING FORM</h1>
+
+
+        <p><u>Study Title</u>: Data Perception Study</p>
+
+
+        <p><u>True Purpose of the Study</u>:</p>
+
+        <p> This study examined how people perceive gradual changes when information is presented sequentially over time. We were specifically testing the "boiling frog" effect - the idea that people have difficulty noticing problems that develop gradually. We compared whether binary data (>10 bikes: yes/no) versus continuous data (# of bikes) helps people better detect gradual increasing trends.</p>
+
+
+        <p><u>Why we didn't fully explain this beforehand</u>:</p>
+
+        <p>Knowing the true purpose might have influenced how you viewed the data, which could have affected the validity of our results.</p>
+
+
+        <p><u>What we measured</u>:</p>
+
+        <p>Your perceptions of climate impact, warming, and change detection in the fictional town of your assignment.</p>
+
+
+        <p><u>Questions or concerns</u>?</p>
+
+        <p>If you have any questions about this study, please contact Prof. Rachit Dubey through Prolific or at rdubey@ucla.edu
+
+        </p>
+        `,
+      ],
+      show_clickable_nav: true,
+    };
+    const redirect = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: `
+    <p><a href="https://app.prolific.co/submissions/complete?cc=XXXXXXX">Click here to return to Prolific and complete the study</a>.</p>`,
+      choices: "NO_KEYS",
+    };
+
+    var enter_fullscreen = {
+      type: jsPsychFullscreen,
+      fullscreen_mode: true,
+      message:
+        "You are about to enter fullscreen mode to upload your data. The experiment will exit fullscreen when the process is done.",
+    };
+
+    var exit_fullscreen = {
+      type: jsPsychFullscreen,
+      fullscreen_mode: false,
+      delay_after: 0,
+    };
     //add to experiment timeline
 
     //trial 1: welcome page
     //add examples if needed
-    const instructions = {
-      type: jsPsychInstructions,
-      pages: [
-        "Welcome to the experiment. Press the 'next' button to begin.",
-        "In this experiment, you will be shown multiple graphs of data and will be asked for your opinion about their significance",
-        "By pressing 'next' to begin the experiment, you consent to the following: *insert consent here*",
-      ],
-      show_clickable_nav: true,
-    };
+    timeline.push(pavlovia_init, consent_trial, instructions_general);
 
-    timeline.push(instructions);
-
-    //trial 2: random assignment to condition 1 (binary) or condition 2 (continuous)
-    // credit = https://www.jspsych.org/v8/reference/jspsych-randomization/#sample-with-equal-probability
+    //trial 2: presentation of graph with random assignment to condition 1 (binary) or condition 2 (continuous)
+    //trial 3: likert scale
     const myArray = [1, 2];
     var group = jsPsych.randomization.sampleWithReplacement(myArray, 1);
 
-    //add trial 2 to end of timeline
     if (group == 1) {
-      timeline.push(condition1LikertScale);
+      (jsPsych.data.addProperties({ plot: random_binary_plot }),
+        timeline.push(
+          instructions_condition1,
+          filler_screen,
+          image_display_binary,
+          binary_likertscale,
+          debrief
+        ));
     } else {
-      timeline.push(condition2LikertScale);
-    };
+      (jsPsych.data.addProperties({ plot: random_continuous_plot }),
+        timeline.push(
+          instructions_condition2,
+          filler_screen,
+          image_display_continuous,
+          continuous_likertscale,
+          debrief
+        ));
+    }
 
-    jsPsych.data.addProperties({condition: group});
+    jsPsych.data.addProperties({ condition: group });
 
-    //trial 3: finish page
-    const finishPage = {
-      type: jsPsychInstructions,
-      pages: [
-        "Thank you for your participation. If you ran into any issues, please message the researchers at cocopolucla@gmail.com.",
-      ],
-      show_clickable_nav: true,
-    };
-    timeline.push(finishPage);
+    //trial 4: finish page
 
-
+    timeline.push(enter_fullscreen, pavlovia_finish, exit_fullscreen, redirect);
 
     //run experiment
     jsPsych.run(timeline);
-
   </script>
 </html>
